@@ -21,7 +21,7 @@ export default {
       completed: Boolean,
     }
   },
-  components: {DeleteItemComponent}
+  components: {DeleteItemComponent},
 }
 </script>
 

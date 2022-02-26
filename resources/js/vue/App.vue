@@ -23,14 +23,16 @@
       </div>
     </div>-->
   <div class="container w-50 mt-5">
-      <div class="card bg-primary bg-opacity-10 d-flex justify-content-center align-items-center w-100">
-        <h1 class="bg-opacity-10  mt-2 p-2">Yapılacaklar Listesi</h1>
-      </div>
+    <div class="card bg-primary bg-opacity-10 d-flex justify-content-center align-items-center w-100">
+      <h1 class="bg-opacity-10  mt-2 p-2">Yapılacaklar Listesi</h1>
+    </div>
     <div class="card bg-primary bg-opacity-10 mt-2 p-2">
       <AddItemComponent :todoList="todoList"/>
-      <ItemPaginationComponent @currentPage ="updateCurrentPage($event)"
-                               :todoList="todoList" />
-      <ListItemComponent :todoList="pageTodoList"/>
+      <ItemPaginationComponent :fCurrentPage ="finalCurrentPage" @currentPage="updateCurrentPage($event)" ref="pagination"
+                               :todoList="todoList"/>
+      <ListItemComponent :pageTodoList="pageTodoList"/>
+      <ItemPaginationComponent :fCurrentPage ="finalCurrentPage" @currentPage="updateCurrentPage($event)" ref="pagination"
+                               :todoList="todoList"/>
     </div>
   </div>
 </template>
@@ -45,13 +47,13 @@ export default {
   data() {
     return {
       todoList: [
-          "Alışveriş","Kitap","İş","Spor","Alışveriş",
-        "Kitap","İş","Spor","Alışveriş","Kitap",
-        "İş","Spor","Alışveriş","Kitap","İş",
-        "Spor","Alışveriş","Kitap","İş","Spor",
-        "Alışveriş","Kitap","İş","Spor","Alışveriş",
-        "Kitap","İş","Spor",],
-      currentPage:1,
+        "Alışveriş", "Kitap", "İş", "Spor", "Alışveriş",
+        "Kitap", "İş", "Spor", "Alışveriş", "Kitap",
+        "İş", "Spor", "Alışveriş", "Kitap", "İş",
+        "Spor", "Alışveriş", "Kitap", "İş", "Spor",
+        "Alışveriş", "Kitap", "İş", "Spor", "Alışveriş",
+        "Kitap", "İş", "Spor",],
+      currentPage: 1,
       pageLength: 5,
       pageTodoList: [],
     }
@@ -59,19 +61,39 @@ export default {
   components: {
     ListItemComponent,
     AddItemComponent,
-    ItemPaginationComponent
+    ItemPaginationComponent,
   },
   created() {
     this.updateTodoList();
   },
   methods: {
-    updateCurrentPage(val){
+    updateCurrentPage(val) {
       this.currentPage = val;
       this.updateTodoList();
     },
-    updateTodoList() {
-      this.pageTodoList = this.todoList.slice((this.currentPage - 1) * this.pageLength, this.currentPage * this.pageLength)
+    updateTodoList(data) {
+      let list = this.todoList;
+      if (data) {
+        list = data;
+      }
+      this.pageTodoList = list.slice((this.currentPage - 1) * this.pageLength, this.currentPage * this.pageLength)
+    },
+  },
+  computed: {
+    finalTodoList() {
+      return this.todoList;
+    },
+    finalCurrentPage(){
+      return this.currentPage;
     }
   },
+  watch: {
+    todoList: {
+      deep: true,
+      handler() {
+          this.updateTodoList();
+      }
+    },
+  }
 }
 </script>

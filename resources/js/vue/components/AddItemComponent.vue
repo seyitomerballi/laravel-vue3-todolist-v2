@@ -14,28 +14,28 @@
 <script>
 export default {
   name: "AddItemComponent",
-  props:["todoList"],
+  props: ["todoList"],
   data() {
     return {
-      item:{
-        title : ""
+      item: {
+        title: ""
       }
     }
   },
   methods: {
-    addItem(event,title = ""){
-      if (this.item.title == ""){
+    addItem(event, title = "") {
+      if (this.item.title == "") {
         return
       }
-      if (title !== ""){
+      if (title !== "") {
         this.todoList.push(title);
-      }else{
+      } else {
         this.todoList.push(event.target.value);
       }
       event.target.value = "";
       this.item.title = "";
     },
-  }
+  },
 }
 </script>
 
